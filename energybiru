@@ -1,0 +1,132 @@
+
+
+gg.clearResults()
+gg.clearList()
+gg.setSpeed(2)
+gg.setVisible(false)
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("1701996056;1651327333;99;27491", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.refineNumber("99", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+
+function wait_for_action()
+    gg.setVisible(false)
+    while true do
+        gg.sleep(100)
+        if gg.isVisible() then
+            break
+        end
+    end
+  end
+
+local results = gg.getResults(50)
+
+for i, result in ipairs(results) do
+    result.address = tonumber(string.format("%x", tonumber(result.address, 16)) - 0x1C)
+    result.flags = gg.TYPE_DWORD
+end
+
+gg.loadResults(results)
+local editedResults = gg.getResults(gg.getResultsCount())
+
+gg.editAll("0", gg.TYPE_DWORD)
+
+local updatedResults = gg.getResults(gg.getResultsCount())
+
+for i, p in ipairs(updatedResults) do
+    updatedResults[i].address = updatedResults[i].address + 0x4
+    updatedResults[i].flags = gg.TYPE_DWORD
+end
+
+gg.loadResults(updatedResults)
+updatedResults = gg.getResults(gg.getResultsCount())
+
+gg.editAll("0", gg.TYPE_DWORD)
+
+for i, p in ipairs(updatedResults) do
+    updatedResults[i].address = updatedResults[i].address + 0x4
+    updatedResults[i].flags = gg.TYPE_DWORD
+end
+
+gg.loadResults(updatedResults)
+updatedResults = gg.getResults(gg.getResultsCount())
+gg.editAll("0", gg.TYPE_DWORD)
+
+
+
+for i, p in ipairs(updatedResults) do
+    updatedResults[i].address = updatedResults[i].address - 0x8
+    updatedResults[i].flags = gg.TYPE_DWORD
+end
+
+gg.loadResults(updatedResults)
+updatedResults = gg.getResults(gg.getResultsCount())
+gg.toast("Silahkan di klaim rewardnya kemudian click icon gg lagi")
+
+
+wait_for_action()
+gg.processResume()
+gg.setVisible(false)
+
+gg.refineNumber("1", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+local results = gg.getResults(50)
+
+for i, v in ipairs(results) do 
+    v.flags = gg.TYPE_DWORD 
+    v.value = 0 
+    v.freeze = true 
+    v.freezeType = gg.FREEZE_NORMAL 
+end 
+
+gg.addListItems(results)
+
+
+
+
+
+
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("1701996056;1651327333;99;5;30", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.refineNumber("5", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+local results = gg.getResults(50)
+
+for i, p in ipairs(results) do
+    results[i].address = results[i].address - 0x24
+    results[i].flags = gg.TYPE_DWORD
+end
+gg.loadResults(results)
+gg.getResults(gg.getResultsCount())
+
+local updatedResults = gg.getResults(50)
+local userInput = gg.prompt({"Masukkan nilai Energy Birunya:"}, {"100000"}, {"number"})
+
+-- Cek apakah input dibatalkan
+if not userInput then
+  gg.alert("Input dibatalkan.")
+  os.exit()
+end
+
+-- Variabel dengan input user dimasukkan di akhir
+local variables2 = {"1886938400", "1953064037", "1164865385", "1735550318", "121", "0", "0", userInput[1]}
+
+for _, var in ipairs(variables2) do
+    for i, p in ipairs(updatedResults) do
+        updatedResults[i].address = updatedResults[i].address + 0x4
+        updatedResults[i].flags = gg.TYPE_DWORD
+    end
+    gg.loadResults(updatedResults)
+    gg.getResults(gg.getResultsCount())
+    gg.editAll(var, gg.TYPE_DWORD)
+    gg.addListItems(updatedResults)
+end
+
+
+
+for i, p in ipairs(updatedResults) do
+    updatedResults[i].address = updatedResults[i].address - 0x1c
+    updatedResults[i].flags = gg.TYPE_DWORD
+end
+gg.loadResults(updatedResults)
+gg.getResults(gg.getResultsCount())
+gg.toast("AVATAR OK BISA DIGUNAKAN")
+
