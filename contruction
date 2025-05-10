@@ -406,7 +406,7 @@ local function processDataAndAddToList(values)
         end
 
         -- Input nilai ke-8 menggunakan prompt
-        local input = gg.prompt({"Masukkan nilai untuk listItems[8]:"}, {[1] = "100000"}, {[1] = "number"})
+        local input = gg.prompt({"Masukkan nilai untuk Contruction"}, {[1] = "100000"}, {[1] = "number"})
         if input == nil then
             gg.toast("Dibatalkan oleh pengguna")
             return
