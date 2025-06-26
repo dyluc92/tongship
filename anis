@@ -139,10 +139,10 @@ function regata()
             -- Bandingkan 4 digit awal
             if prefix1 == prefix2 then
                 table.insert(edits, {address = pointerValue, flags = gg.TYPE_DWORD, value = 0})
-                table.insert(edits, {address = pointerValue + 4, flags = gg.TYPE_DWORD, value = 295})
+                table.insert(edits, {address = pointerValue + 4, flags = gg.TYPE_DWORD, value = 150})
     
                 table.insert(listItems, {address = pointerValue, flags = gg.TYPE_DWORD, value = 0, freeze = true})
-                table.insert(listItems, {address = pointerValue + 4, flags = gg.TYPE_DWORD, value = 295, freeze = true})
+                table.insert(listItems, {address = pointerValue + 4, flags = gg.TYPE_DWORD, value = 150, freeze = true})
             else
                 -- gg.toast("Nilai tidak cocok di: " .. string.format("%X", pointerValue) ..
                 --          " (" .. prefix1 .. " ≠ " .. prefix2 .. ")")
