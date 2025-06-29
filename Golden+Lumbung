@@ -164,9 +164,9 @@ local function clearFile()
     local file = io.open(filePath, "w") -- Membuka file dalam mode write untuk menghapus isi
     if file then
         file:close()
-        gg.toast("File avatar.txt telah dibersihkan.")
+        gg.toast("Clear data")
     else
-        gg.toast("Gagal membersihkan file avatar.txt.")
+        gg.toast("Gagal membersihkan file")
     end
 end
 
@@ -186,7 +186,7 @@ local function simpanKeFile(filePath, data)
             file:write(line .. "\n")
         end
         file:close()
-        print("Data berhasil disimpan ke " .. filePath)
+        
     else
         print("Gagal membuka file!")
     end
@@ -502,7 +502,6 @@ end
 main()
 runNext()
 os.exit()
-
 
 
 
