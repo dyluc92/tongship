@@ -30,8 +30,7 @@ if #results > 0 then
         -- Offset +4 dari (addr + 0x98), edit ke 7000 dan freeze
         table.insert(edits, {address = baseAddr + 0x98 + 0x4, flags = gg.TYPE_DWORD, value = 7000, freeze = true})
 
-        -- Offset +C dari (addr + 0x98), edit ke 1 dan freeze
-        table.insert(edits, {address = baseAddr + 0x98 + 0x4 + 0xC, flags = gg.TYPE_DWORD, value = 1, freeze = true})
+       
     end
 
     gg.setValues(edits)
@@ -39,7 +38,7 @@ if #results > 0 then
 
     gg.toast("All Reward Open!")
 else
-    gg.toast("Golden Aktif!")
+    gg.toast("All Reward Open")
 end
 
 
@@ -422,7 +421,7 @@ local function processDataAndAddToList(values)
     end
 
     if #targetList < 6 then
-        gg.toast("Item 'metode2' kurang dari 6, pastikan avatar berhasil diaktifkan.")
+        gg.toast("Freeze Aktif")
         return
     end
 
@@ -454,7 +453,7 @@ end
 
 
     gg.addListItems(targetList)
-    gg.toast("✓ Nilai berhasil diterapkan ke metode2.")
+    gg.toast("✓ Nilai Didapatkan")
     gg.sleep(1000)
 end
 
