@@ -1,0 +1,505 @@
+gg.alert([[
+🔥 DYLUC GAMING 🔥
+
+╔════════════════════╗
+║ D Y L U C  G A M I N G ║
+╚════════════════════╝
+
+Cheat Dimulai 🚀
+]])
+gg.toast("🔥 Let's Go Dyluc Style!")
+
+gg.clearResults()
+gg.clearList() 
+gg.setSpeed(2)
+gg.setVisible(false)
+gg.searchNumber("61726108h;00000062h;6E726514h;615F6569h;00626172h", gg.TYPE_DWORD)
+gg.refineNumber("6E726514h", gg.TYPE_DWORD)
+
+local results = gg.getResults(9999) -- Mengambil semua hasil refine
+
+if #results > 0 then
+    local edits = {}
+
+    for i, v in ipairs(results) do
+        local baseAddr = v.address
+
+        -- Offset +98, edit dword ke 0 dan freeze
+        table.insert(edits, {address = baseAddr + 0x98, flags = gg.TYPE_DWORD, value = 0, freeze = true})
+
+        -- Offset +4 dari (addr + 0x98), edit ke 7000 dan freeze
+        table.insert(edits, {address = baseAddr + 0x98 + 0x4, flags = gg.TYPE_DWORD, value = 7000, freeze = true})
+
+        -- Offset +C dari (addr + 0x98), edit ke 1 dan freeze
+        table.insert(edits, {address = baseAddr + 0x98 + 0x4 + 0xC, flags = gg.TYPE_DWORD, value = 1, freeze = true})
+    end
+
+    gg.setValues(edits)
+    gg.addListItems(edits) -- Menambahkan ke daftar freeze GG
+
+    gg.toast("All Reward Open!")
+else
+    gg.toast("Golden Aktif!")
+end
+
+
+
+
+
+
+
+
+--FREZEE
+
+
+gg.clearResults()
+gg.clearList()
+gg.setSpeed(2)
+gg.setVisible(false)
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("52336D1Ah;626E6961h;756F432Ch;4C6E6F70h;5464616Fh;6E696172h:461", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.refineNumber("6E696172h", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+
+function wait_for_action()
+    gg.setVisible(false)
+    while true do
+        gg.sleep(100)
+        if gg.isVisible() then
+            break
+        end
+    end
+  end
+
+local results = gg.getResults(50)
+
+for i, result in ipairs(results) do
+    result.address = tonumber(string.format("%x", tonumber(result.address, 16)) - 0x1C)
+    result.flags = gg.TYPE_DWORD
+end
+
+gg.loadResults(results)
+
+local results = gg.getResults(50)
+
+for i, v in ipairs(results) do 
+    v.flags = gg.TYPE_DWORD 
+    v.value = 0 
+    v.freeze = true 
+    v.freezeType = gg.FREEZE_NORMAL 
+end 
+
+gg.addListItems(results)
+
+
+
+
+
+
+
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("1970225964;1282305904;1415864687;5;29", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.refineNumber("5", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+local results = gg.getResults(50)
+
+for i, p in ipairs(results) do
+    results[i].address = results[i].address - 0x24
+    results[i].flags = gg.TYPE_DWORD
+end
+gg.loadResults(results)
+gg.getResults(gg.getResultsCount())
+
+local updatedResults = gg.getResults(50)
+local variables2 = {"1886938400", "1953064037", "1164865385", "1735550318", "121", "0","0","2"}
+
+for _, var in ipairs(variables2) do
+    for i, p in ipairs(updatedResults) do
+        updatedResults[i].address = updatedResults[i].address + 0x4
+        updatedResults[i].flags = gg.TYPE_DWORD
+        updatedResults[i].name = "metode2"  -- Tambahkan nama sebagai tag
+    end
+    gg.loadResults(updatedResults)
+    gg.getResults(gg.getResultsCount())
+    gg.editAll(var, gg.TYPE_DWORD)
+
+    gg.addListItems(updatedResults)
+end
+
+
+
+for i, p in ipairs(updatedResults) do
+    updatedResults[i].address = updatedResults[i].address - 0x1c
+    updatedResults[i].flags = gg.TYPE_DWORD
+end
+gg.loadResults(updatedResults)
+gg.getResults(gg.getResultsCount())
+gg.toast("AVATAR OK BISA DIGUNAKAN")
+
+
+
+
+
+local filePath = "/storage/emulated/0/Pictures/avatar.txt"
+
+
+local function appendValuesToFile(copiedValues)
+    local file = io.open(filePath, "a") -- Membuka file untuk menambahkan data
+    if file then
+        local copiedValuesStr = table.concat(copiedValues, ";")
+        file:write(copiedValuesStr .. "\n") -- Menambahkan baris baru setelah setiap pencarian
+        file:close()
+        gg.toast("Data disimpan ke avatar.txt.")
+    else
+        gg.toast("Gagal menyimpan data ke file.")
+    end
+end
+
+
+local function clearFile()
+    local file = io.open(filePath, "w") -- Membuka file dalam mode write untuk menghapus isi
+    if file then
+        file:close()
+        gg.toast("File avatar.txt telah dibersihkan.")
+    else
+        gg.toast("Gagal membersihkan file avatar.txt.")
+    end
+end
+
+clearFile()
+
+
+local dataSudahada = {
+
+
+}
+
+-- Fungsi untuk menyimpan data ke file
+local function simpanKeFile(filePath, data)
+    local file = io.open(filePath, "w") -- "w" untuk menulis, gunakan "a" untuk menambahkan
+    if file then
+        for _, line in ipairs(data) do
+            file:write(line .. "\n")
+        end
+        file:close()
+        print("Data berhasil disimpan ke " .. filePath)
+    else
+        print("Gagal membuka file!")
+    end
+end
+
+-- Menyimpan data sebelum pencarian dilakukan
+simpanKeFile(filePath, dataSudahada)
+
+-- Lanjutkan proses pencarian data di sini...
+
+-- Fungsi untuk melakukan pencarian dan menyimpan hasilnya
+local function searchAndSave(searchString)
+    gg.clearResults()
+    gg.setVisible(false)
+    gg.setRanges(gg.REGION_C_ALLOC)
+    gg.searchNumber("1113542739;1919906899;1667330145;1701146707:35", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+
+    local results = gg.getResults(1)
+
+    for i, result in ipairs(results) do
+        result.address = tonumber(string.format("%x", tonumber(result.address, 16)) - 0x8)
+        result.flags = gg.TYPE_DWORD
+    end
+
+
+    gg.loadResults(results)
+    gg.refineNumber("1113542739", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+
+    if #results == 0 then
+        gg.toast("Tidak ada hasil yang ditemukan setelah refine.")
+    end
+
+    gg.toast("Refine selesai, ditemukan " .. #results .. " hasil.")
+
+    
+    -- Iterasi hasil dan cari pointer pertama yang valid
+for i, result in ipairs(results) do
+    local targetAddress = result.address
+
+
+    -- Mencari QWORD yang menunjuk langsung ke alamat hasil
+    gg.clearResults()
+    gg.searchNumber(targetAddress, gg.TYPE_QWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+
+    -- Ambil nilai ke-4 dari targetAddress untuk refine
+    local addressString = tostring(targetAddress)
+    local parts = {}
+
+    for match in addressString:gmatch("[^;]+") do
+        table.insert(parts, match)
+    end
+
+    -- Jika ada setidaknya 4 nilai dalam targetAddress
+    if #parts >= 4 then
+        local fourthValue = tonumber(parts[4]) -- Ambil nilai ke-4
+
+        if fourthValue then
+            -- Refine berdasarkan nilai ke-4
+            gg.refineNumber(fourthValue, gg.TYPE_DWORD)
+
+            -- Ambil hasil setelah refine
+            local refinedResults = gg.getResults(9999)
+
+            -- Lompat ke offset -0xC dari hasil refine
+            for j, refined in ipairs(refinedResults) do
+                refined.address = refined.address - 0xC
+            end
+
+            -- Simpan hasil refine yang sudah di-offset -0xC
+            gg.loadResults(refinedResults)
+        end
+    end
+
+    -- Lanjutkan proses seperti sebelumnya
+    local pointerResults = gg.getResults(9999)
+
+    -- Jika menemukan pointer yang valid, iterasi melalui semua hasil pointer
+    for j, pointer in ipairs(pointerResults) do
+        local pointerAddress = pointer.address
+        
+        -- Menuju offset -0x10 dari pointer
+        local newAddress = pointerAddress - 0x10
+
+        -- Cek nilai di alamat hasil offset -0x10
+        local checkValue = gg.getValues({{address = newAddress, flags = gg.TYPE_DWORD}})
+        
+        if checkValue and #checkValue > 0 then
+            local value = checkValue[1].value
+
+            -- Jika nilai adalah 33 atau 49, lanjutkan proses penyimpanan
+            if value == 33 or value == 49 then
+                -- Menyimpan alamat hasil offset -0x10 ke daftar hasil
+                local offsetResult = {}
+                offsetResult[1] = { address = newAddress, flags = gg.TYPE_DWORD }
+
+                -- Load hasil akhir (offset -0x10)
+                gg.loadResults(offsetResult)
+                gg.toast("Proses selesai, hasil akhir ditemukan dan dimuat.")
+
+                -- *** Menyalin nilai DWORD dari alamat hasil dengan offset +4 ***
+                local function copyValues(address)
+                    local values = {}
+                    for _ = 1, 6 do
+                        local newValue = gg.getValues({{address = address, flags = gg.TYPE_DWORD}})
+                        if newValue and #newValue > 0 then
+                            table.insert(values, newValue[1].value)
+                        else
+                            print("Gagal mendapatkan nilai DWORD dari alamat: " .. address)
+                            return nil
+                        end
+                        address = address + 0x4 -- Offset +4 untuk mendapatkan 6 nilai
+                    end
+                    return values
+                end
+
+                -- Menyimpan nilai ke file .txt seperti di script sebelumnya
+                local copiedValues = copyValues(newAddress)
+                if copiedValues then
+                    appendValuesToFile(copiedValues)  -- Menyimpan data ke file dalam format yang sama
+                else
+                    print("Gagal menyalin nilai untuk hasil ke-" .. newAddress)
+                end
+
+                return -- Hentikan pencarian setelah menemukan nilai yang benar
+            end
+        end
+    end
+end
+
+
+
+
+
+
+    local results = gg.getResults(99999)
+
+    -- Fungsi untuk menyalin nilai DWORD dari alamat dengan offset +4
+    local function copyValues(address)
+        local values = {} -- Reset nilai setiap kali fungsi dipanggil
+        for _ = 1, 6 do
+            local newValue = gg.getValues({{address = address, flags = gg.TYPE_DWORD}})
+            if newValue and #newValue > 0 then
+                table.insert(values, newValue[1].value)
+            else
+                print("Gagal mendapatkan nilai DWORD dari alamat: " .. address)
+                return nil
+            end
+            address = address + 0x4 -- Menambah alamat dengan offset +4
+        end
+        return values
+    end
+
+    -- Menyimpan nilai ke file txt segera setelah proses pencarian selesai
+    local copiedValues = {}
+    for _, result in ipairs(results) do
+        local initialAddress = result.address
+        local values = copyValues(initialAddress)
+        if values then
+            -- Simpan nilai ke file .txt langsung setelah ditemukan
+            appendValuesToFile(values)  -- Menambahkan data ke file
+            copiedValues = values
+        else
+            print("Gagal menyalin nilai untuk hasil ke-" .. result.address)
+        end
+    end
+
+    gg.toast("Semua hasil telah diproses dan data telah disimpan.")
+end
+
+-- Daftar pencarian yang akan dilakukan
+local searchStrings = {
+"1113542739;1953722223;1919906899;1130719073;1667330145;7959657"
+
+
+
+}
+
+-- Menjalankan pencarian dan menyimpan data untuk setiap string pencarian
+for _, searchString in ipairs(searchStrings) do
+    searchAndSave(searchString)
+end
+
+
+
+
+
+
+
+gg.setVisible(false)
+
+local function loadDataFromFile()
+    local data = {}
+    local file = io.open("/storage/emulated/0/Pictures/avatar.txt", "r") -- Ganti dengan path file yang sesuai
+    if file then
+        for line in file:lines() do
+            table.insert(data, line) -- Menambahkan setiap baris ke dalam data
+        end
+        file:close()
+    else
+        gg.toast("Gagal membuka file untuk dibaca.")
+    end
+    return data
+end
+
+local filterValues = {
+    "33;0;23;0;739469408;32767",
+    "33;0;23;0;739469344;32767",
+    "33;0;23;0;739469376;32767",
+    "33;0;23;0;739468832;32767"
+    -- Tambahkan lebih banyak nilai jika diperlukan
+}
+
+-- Fungsi untuk memeriksa apakah nilai ada dalam daftar filter
+local function isFiltered(copiedValues)
+    local copiedValuesStr = table.concat(copiedValues, ";")
+    for _, filterValue in ipairs(filterValues) do
+        if copiedValuesStr == filterValue then
+            return true -- Nilai ada dalam daftar filter
+        end
+    end
+    return false -- Nilai tidak ada dalam daftar filter
+end
+
+local function processDataAndAddToList(values)
+    if isFiltered(values) then
+        print("Nilai ini tidak diproses: " .. table.concat(values, ";"))
+        return
+    end
+
+    -- Ambil hanya list item dengan nama "metode2"
+    local allListItems = gg.getListItems()
+    local targetList = {}
+
+    for _, item in ipairs(allListItems) do
+        if item.name == "metode2" then
+            table.insert(targetList, item)
+        end
+    end
+
+    if #targetList < 6 then
+        gg.toast("Item 'metode2' kurang dari 6, pastikan avatar berhasil diaktifkan.")
+        return
+    end
+
+    for i = 1, 6 do
+        targetList[i].value = values[i]
+        targetList[i].freeze = true
+        targetList[i].freezeType = gg.FREEZE_NORMAL
+    end
+
+    if targetList[7] then
+        targetList[7].value = 0
+        targetList[7].freeze = true
+        targetList[7].freezeType = gg.FREEZE_NORMAL
+    end
+
+if targetList[8] then
+    local input = gg.prompt({"Masukkan Value Barn"}, {[1] = 5000}, {"number"})
+    if input and input[1] then
+        targetList[8].value = tonumber(input[1])
+        targetList[8].freeze = true
+        targetList[8].freezeType = gg.FREEZE_NORMAL
+    else
+        gg.toast("Input dibatalkan, menggunakan nilai default 5000")
+        targetList[8].value = 5000
+        targetList[8].freeze = true
+        targetList[8].freezeType = gg.FREEZE_NORMAL
+    end
+end
+
+
+    gg.addListItems(targetList)
+    gg.toast("✓ Nilai berhasil diterapkan ke metode2.")
+    gg.sleep(1000)
+end
+
+
+
+-- Variabel untuk melacak data yang sedang diproses
+local currentIndex = 1
+local data = loadDataFromFile() -- Memuat data dari file
+
+-- Fungsi untuk memproses data selanjutnya
+local function runNext()
+    if currentIndex <= #data then
+        local line = data[currentIndex] -- Ambil baris data yang sesuai
+        local values = {} -- Menyimpan nilai-nilai dari satu baris
+        gg.toast("Memproses baris " .. currentIndex .. " dari " .. #data)
+
+
+        for value in string.gmatch(line, "([^;]+)") do
+            table.insert(values, tonumber(value)) -- Menambahkan nilai yang dipisahkan ; ke dalam array
+        end
+        processDataAndAddToList(values) -- Proses dan tambahkan data ke dalam listItems
+        currentIndex = currentIndex + 1 -- Maju ke data selanjutnya
+    else
+        gg.toast("Semua data telah diproses.")
+        os.exit() -- Keluar dari skrip setelah semua data diproses
+    end
+end
+
+
+-- Fungsi utama yang memanggil runNext()
+local function main()
+    if #data > 0 then
+        gg.toast("Pencarian Selesai , CLAIM SKIN NYA")
+    else
+        gg.toast("Tidak ada data yang ditemukan dalam file.")
+    end
+end
+
+-- Menjalankan fungsi utama
+main()
+runNext()
+os.exit()
+
+
+
+
+
+
