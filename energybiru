@@ -1,12 +1,53 @@
 
+gg.clearResults()
+gg.setSpeed(2)
+gg.setVisible(false)
+gg.searchNumber("61726108h;00000062h;6E726514h;615F6569h;00626172h", gg.TYPE_DWORD)
+gg.refineNumber("6E726514h", gg.TYPE_DWORD)
+
+local results = gg.getResults(9999) -- Mengambil semua hasil refine
+
+if #results > 0 then
+    local edits = {}
+
+    for i, v in ipairs(results) do
+        local baseAddr = v.address
+
+        -- Offset +98, edit dword ke 0 dan freeze
+        table.insert(edits, {address = baseAddr + 0x98, flags = gg.TYPE_DWORD, value = 0, freeze = true})
+
+        -- Offset +4 dari (addr + 0x98), edit ke 7000 dan freeze
+        table.insert(edits, {address = baseAddr + 0x98 + 0x4, flags = gg.TYPE_DWORD, value = 7000, freeze = true})
+
+      
+    end
+
+    gg.setValues(edits)
+    gg.addListItems(edits) -- Menambahkan ke daftar freeze GG
+
+    gg.toast("Alll Reward Open!")
+    gg.clearResults()
+    -- gg.clearList()
+else
+    gg.toast("Nilai tidak ditemukan!")
+end
+
+
+
+
+
+
+
+--FREZEE
+
 
 gg.clearResults()
 gg.clearList()
 gg.setSpeed(2)
 gg.setVisible(false)
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("1701996056;1651327333;99;27491", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
-gg.refineNumber("99", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.searchNumber("52336D1Ah;626E6961h;756F432Ch;4C6E6F70h;5464616Fh;6E696172h:461", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.refineNumber("6E696172h", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
 
 function wait_for_action()
     gg.setVisible(false)
@@ -26,48 +67,7 @@ for i, result in ipairs(results) do
 end
 
 gg.loadResults(results)
-local editedResults = gg.getResults(gg.getResultsCount())
 
-gg.editAll("0", gg.TYPE_DWORD)
-
-local updatedResults = gg.getResults(gg.getResultsCount())
-
-for i, p in ipairs(updatedResults) do
-    updatedResults[i].address = updatedResults[i].address + 0x4
-    updatedResults[i].flags = gg.TYPE_DWORD
-end
-
-gg.loadResults(updatedResults)
-updatedResults = gg.getResults(gg.getResultsCount())
-
-gg.editAll("0", gg.TYPE_DWORD)
-
-for i, p in ipairs(updatedResults) do
-    updatedResults[i].address = updatedResults[i].address + 0x4
-    updatedResults[i].flags = gg.TYPE_DWORD
-end
-
-gg.loadResults(updatedResults)
-updatedResults = gg.getResults(gg.getResultsCount())
-gg.editAll("0", gg.TYPE_DWORD)
-
-
-
-for i, p in ipairs(updatedResults) do
-    updatedResults[i].address = updatedResults[i].address - 0x8
-    updatedResults[i].flags = gg.TYPE_DWORD
-end
-
-gg.loadResults(updatedResults)
-updatedResults = gg.getResults(gg.getResultsCount())
-gg.toast("Silahkan di klaim rewardnya kemudian click icon gg lagi")
-
-
-wait_for_action()
-gg.processResume()
-gg.setVisible(false)
-
-gg.refineNumber("1", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
 local results = gg.getResults(50)
 
 for i, v in ipairs(results) do 
@@ -84,9 +84,10 @@ gg.addListItems(results)
 
 
 
+
 gg.clearResults()
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("1701996056;1651327333;99;5;30", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+gg.searchNumber("1970225964;1282305904;1415864687;5;29", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
 gg.refineNumber("5", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
 local results = gg.getResults(50)
 
@@ -98,27 +99,32 @@ gg.loadResults(results)
 gg.getResults(gg.getResultsCount())
 
 local updatedResults = gg.getResults(50)
-local userInput = gg.prompt({"Masukkan nilai Energy Birunya:"}, {"100000"}, {"number"})
+-- Prompt input dari pengguna untuk nilai terakhir (sebelumnya 10)
+local userInput = gg.prompt({"Masukkan nilai Energy Biru"}, {10}, {"number"})
 
--- Cek apakah input dibatalkan
-if not userInput then
-  gg.alert("Input dibatalkan.")
-  os.exit()
+-- Jika pengguna tidak membatalkan prompt
+if userInput == nil then
+    gg.toast("Input dibatalkan.")
+    os.exit()
 end
 
--- Variabel dengan input user dimasukkan di akhir
-local variables2 = {"1886938400", "1953064037", "1164865385", "1735550318", "121", "0", "0", userInput[1]}
+-- Daftar nilai variables2, dengan nilai terakhir diisi dari prompt
+local variables2 = {"1886938400", "1953064037", "1164865385", "1735550318", "121", "0", "0", tostring(userInput[1])}
+
 
 for _, var in ipairs(variables2) do
     for i, p in ipairs(updatedResults) do
         updatedResults[i].address = updatedResults[i].address + 0x4
         updatedResults[i].flags = gg.TYPE_DWORD
+        updatedResults[i].name = "metode2"  -- Tambahkan nama sebagai tag
     end
     gg.loadResults(updatedResults)
     gg.getResults(gg.getResultsCount())
     gg.editAll(var, gg.TYPE_DWORD)
+
     gg.addListItems(updatedResults)
 end
+
 
 
 
@@ -129,4 +135,3 @@ end
 gg.loadResults(updatedResults)
 gg.getResults(gg.getResultsCount())
 gg.toast("AVATAR OK BISA DIGUNAKAN")
-
