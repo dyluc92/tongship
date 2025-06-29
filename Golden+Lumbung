@@ -501,6 +501,8 @@ end
 -- Menjalankan fungsi utama
 main()
 runNext()
+gg.clearResults()
+gg.clearList() 
 os.exit()
 
 
