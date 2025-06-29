@@ -450,8 +450,8 @@ if targetList[8] then
         targetList[8].freeze = true
         targetList[8].freezeType = gg.FREEZE_NORMAL
     else
-        gg.toast("Input dibatalkan, menggunakan nilai default 5000")
-        targetList[8].value = 5000
+        gg.toast("Input dibatalkan, menggunakan nilai default 10")
+        targetList[8].value = 10
         targetList[8].freeze = true
         targetList[8].freezeType = gg.FREEZE_NORMAL
     end
