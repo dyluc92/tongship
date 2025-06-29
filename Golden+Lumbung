@@ -458,8 +458,7 @@ local function runNext()
         end
         processDataAndAddToList(values) -- Proses dan tambahkan data ke dalam listItems
         currentIndex = currentIndex + 1 -- Maju ke data selanjutnya
-        gg.clearResults()
-        gg.clearList()
+
     else
         gg.toast("Semua data telah diproses.")
         os.exit() -- Keluar dari skrip setelah semua data diproses
