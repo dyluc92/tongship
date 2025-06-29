@@ -1,3 +1,9 @@
+if g and g["Serrang"] then
+  -- aman untuk digunakan
+end
+
+
+
 gg.alert([[
 🔥 DYLUC GAMING 🔥
 
