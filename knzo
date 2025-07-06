@@ -1,0 +1,250 @@
+gg.clearResults()
+gg.setVisible(false)
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.setSpeed(2)
+id4C, id50, id54 = nil, nil, nil
+
+gg.clearResults()
+
+
+gg.searchNumber("1702257942;1868526702;1952533772;3369059:53", gg.TYPE_DWORD)
+gg.refineNumber("3369059", gg.TYPE_DWORD)
+
+local results = gg.getResults(9999)
+local uniqueSet = {}
+
+gg.toast("Mulai cek offset...")
+
+for i, result in ipairs(results) do
+    local base = result.address
+    local offset4C = base + 0x4C
+    local offset50 = base + 0x50
+    local offset54 = base + 0x54
+
+    local values = gg.getValues({
+        {address = offset4C, flags = gg.TYPE_DWORD},
+        {address = offset50, flags = gg.TYPE_DWORD},
+        {address = offset54, flags = gg.TYPE_DWORD}
+    })
+
+    local val4C = values[1].value
+    local val50 = values[2].value
+    local val54 = values[3].value
+
+    local len4C = #tostring(val4C)
+    local len50 = #tostring(val50)
+    local len54 = #tostring(val54)
+
+    local is4C_valid = len4C >= 9 and len4C <= 10
+    local is50_valid = len50 >= 9 and len50 <= 10
+    local is54_valid = len54 == 7
+
+    local key = val4C .. ";" .. val50 .. ";" .. val54
+
+    if is4C_valid and is50_valid and is54_valid then
+        if not uniqueSet[key] then
+            uniqueSet[key] = true
+
+            -- 👉 Simpan ID buat dipakai di fungsi lain
+            id4C = val4C
+            id50 = val50
+            id54 = val54
+
+            print("✔️ ID ditemukan!")
+            print("   val4C : " .. val4C)
+            print("   val50 : " .. val50)
+            print("   val54 : " .. val54)
+
+            break  -- Hanya ambil satu set ID pertama, keluar dari loop
+        end
+    end
+end
+
+if id4C and id50 and id54 then
+    gg.toast("ID siap dipakai!")
+    
+else
+    gg.toast("❌ ID tidak ditemukan!")
+    os.exit()
+end
+
+
+
+
+function cariRegata()
+    gg.setSpeed(2)
+    if not (id4C and id50 and id54) then
+        gg.alert("ID belum diambil! Jalankan pencarian ID dulu.")
+        return
+    end
+
+    gg.setVisible(false)
+    gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
+
+    -- 👉 Pake id4C, id50, id54 hasil pencarian tadi
+    local searchString = string.format("1952533772;3369059;%d;%d;%d", id4C, id50, id54)
+
+    gg.searchNumber(searchString, gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+    gg.refineNumber(tostring(id54), gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1, 0)
+
+    local results = gg.getResults(9999)
+
+    for i, result in ipairs(results) do
+        result.address = tonumber(string.format("%x", tonumber(result.address, 16)) + 0x158)
+        result.flags = gg.TYPE_DWORD
+    end
+
+    gg.loadResults(results)
+
+    -- gg.toast("cariRegata selesai!")
+    return results
+end
+
+
+
+
+function regata()
+
+    gg.setVisible(false)
+
+    gg.clearResults()
+    gg.clearList()
+    gg.setRanges(gg.REGION_C_ALLOC)
+    
+    local results = cariRegata()
+    
+    local edits = {}
+    local listItems = {}
+    
+    for i, result in ipairs(results) do
+        local baseAddress = result.address
+        local pointerData = gg.getValues({{address = baseAddress, flags = gg.TYPE_QWORD}})
+        local pointerValue = pointerData[1].value
+    
+        if pointerValue ~= 0 then
+            -- Ambil nilai DWORD saat ini
+            local currentValues = gg.getValues({
+                {address = pointerValue, flags = gg.TYPE_DWORD},
+                {address = pointerValue + 4, flags = gg.TYPE_DWORD}
+            })
+    
+            local val1 = currentValues[1].value
+            local val2 = currentValues[2].value
+    
+            -- Konversi ke string dan ambil 4 digit pertama
+            local prefix1 = tostring(math.abs(val1)):sub(1, 4)
+            local prefix2 = tostring(math.abs(val2)):sub(1, 4)
+    
+            -- Bandingkan 4 digit awal
+            if prefix1 == prefix2 then
+                table.insert(edits, {address = pointerValue, flags = gg.TYPE_DWORD, value = 0})
+                table.insert(edits, {address = pointerValue + 4, flags = gg.TYPE_DWORD, value = 150})
+    
+                table.insert(listItems, {address = pointerValue, flags = gg.TYPE_DWORD, value = 0, freeze = true})
+                table.insert(listItems, {address = pointerValue + 4, flags = gg.TYPE_DWORD, value = 150, freeze = true})
+            else
+                -- gg.toast("Nilai tidak cocok di: " .. string.format("%X", pointerValue) ..
+                --          " (" .. prefix1 .. " ≠ " .. prefix2 .. ")")
+            end
+        else
+            -- gg.toast("Pointer di alamat " .. string.format("%X", baseAddress) .. " tidak valid!")
+        end
+    end
+    
+    if #edits > 0 then
+        gg.setValues(edits)
+        gg.addListItems(listItems)
+    end
+    
+    gg.setVisible(false)
+    gg.setRanges(gg.REGION_C_ALLOC)
+    local results = gg.getResults(9999)
+    
+    for i, result in ipairs(results) do
+        result.address = tonumber(string.format("%x", tonumber(result.address, 16)) - 0x158)
+        result.flags = gg.TYPE_DWORD
+    end
+    gg.loadResults(results)
+    if #results == 0 then
+        gg.toast("No results found")
+    else
+        for i, result in ipairs(results) do
+            result.address = result.address + 0x10
+            result.flags = gg.TYPE_DWORD
+        end
+    
+        gg.loadResults(results)
+        local editedResults = gg.getResults(gg.getResultsCount())
+    
+        gg.editAll("0", gg.TYPE_DWORD)
+    
+        local updatedResults = gg.getResults(gg.getResultsCount())
+    
+        for i, p in ipairs(updatedResults) do
+            updatedResults[i].address = updatedResults[i].address + 0x4
+            updatedResults[i].flags = gg.TYPE_DWORD
+        end
+        gg.loadResults(updatedResults)
+        updatedResults = gg.getResults(gg.getResultsCount())
+        gg.editAll("1", gg.TYPE_DWORD)
+    
+        for i, p in ipairs(updatedResults) do
+            updatedResults[i].address = updatedResults[i].address + 0x4
+            updatedResults[i].flags = gg.TYPE_DWORD
+        end
+        gg.loadResults(updatedResults)
+        updatedResults = gg.getResults(gg.getResultsCount())
+        gg.editAll("0", gg.TYPE_DWORD)
+    
+        for i, p in ipairs(updatedResults) do
+            updatedResults[i].address = updatedResults[i].address + 0x4
+            updatedResults[i].flags = gg.TYPE_DWORD
+        end
+        gg.loadResults(updatedResults)
+        updatedResults = gg.getResults(gg.getResultsCount())
+        gg.editAll("1", gg.TYPE_DWORD)
+    end
+    
+    
+    
+end
+
+local selectedChoices = {}
+
+-- Table to keep track of executed functions
+local executedFunctions = {}
+
+function HOME()
+    local choice = gg.choice({
+        "✔️ SELESAIKAN TASK",
+        "🚪 Exit"
+    }, nil, 'HACK BY DYLUC')
+
+    if choice == nil then return end
+
+    if choice == 1 then 
+        regata()      
+    elseif choice == 2 then
+        os.exit() -- atau fungsi exit lainnya
+    end
+end
+
+
+
+
+function d()
+    gg.clearList(f)
+    os.exit()
+end
+
+while true do
+    if gg.isVisible(true) then
+        HOMEDM = 1
+        gg.setVisible(false)
+    end
+    if HOMEDM == 1 then
+        regata()  
+        HOMEDM = -1
+    end
+end
