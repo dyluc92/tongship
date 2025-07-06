@@ -1,0 +1,25 @@
+gg.clearResults();
+gg.clearList();
+API = gg.makeRequest('  https://raw.githubusercontent.com/dyluc92/tongship/refs/heads/main/lumbung.lua  ').content
+if not API then
+    gg.alert('⚠⚠You Are Offline⚠⚠️\nOR\n⚠⚠You Did not Give Internet access⚠⚠')
+    noselect()
+else
+    pcall(load(API))
+end
+
+
+gg.clearResults();
+-- Hapus item yang mengandung nama "metode2" dari addList
+local listItems = gg.getListItems()
+local filteredItems = {}
+
+for i, v in ipairs(listItems) do
+    if v.name and v.name:find("metode2") then
+        table.insert(filteredItems, v)
+    end
+end
+
+if #filteredItems > 0 then
+    gg.removeListItems(filteredItems)
+end
