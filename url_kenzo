@@ -1,6 +1,6 @@
 gg.clearResults();
 gg.clearList();
-API = gg.makeRequest('  https://raw.githubusercontent.com/dyluc92/tongship/refs/heads/main/lumbung.lua  ').content
+API = gg.makeRequest('  https://raw.githubusercontent.com/dyluc92/tongship/refs/heads/main/knzo  ').content
 if not API then
     gg.alert('⚠⚠You Are Offline⚠⚠️\nOR\n⚠⚠You Did not Give Internet access⚠⚠')
     noselect()
